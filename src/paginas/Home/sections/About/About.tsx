@@ -52,7 +52,7 @@ const About = () => {
                                 <Typography color="primary" variant="h3" textAlign="start" pb={2}>{text}</Typography>
                             </AnimatedTextContainer>
                             <Typography color="primary" variant="h5" textAlign="start" mt={4}>
-                                I am a computer science student, I am 25 years old and I live in Porto Alegre/RS.
+                                I am a computer science student, I am 26 years old and I live in Porto Alegre/RS.
                                 
                             </Typography>
                             <Typography color="primary" variant="h5" textAlign="start" mt={4}>
