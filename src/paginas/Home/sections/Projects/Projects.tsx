@@ -22,6 +22,15 @@ const projectsData = [
   },
 ];
 
+const TypingIndicator = styled(Box)({
+  display: 'inline-block',
+  width: '2px',
+  height: '40px',
+  backgroundColor: 'white',
+  animation: 'blink 1s infinite',
+  marginLeft: '5px',
+});
+
 const Projects = () => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [animatedTitle, setAnimatedTitle] = useState("");
@@ -46,7 +55,7 @@ const Projects = () => {
 
   useEffect(() => {
     const currentPhrase = projectsData[currentProjectIndex].title;
-    
+
     const handleTyping = () => {
       const newText = isDeleting
         ? currentPhrase.substring(0, animatedTitle.length - 1)
@@ -90,6 +99,7 @@ const Projects = () => {
             <TitleContainer>
               <Typography color="primary" variant="h3" textAlign="start" pb={2} mb={3}>
                 {animatedTitle}
+                <TypingIndicator /> {/* Sempre visível */}
               </Typography>
             </TitleContainer>
             <Typography color="primary" variant="h5" textAlign="start" mb={5}>

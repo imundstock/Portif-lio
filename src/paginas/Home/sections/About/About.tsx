@@ -1,6 +1,6 @@
 import { styled, Container, Typography, Grid, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AnimatedBackground2 } from "../../../../components/AnimatedBackground/AnimatedBackground2"
+import { AnimatedBackground2 } from "../../../../components/AnimatedBackground/AnimatedBackground2";
 
 const About = () => {
     const StyledHero = styled("div")(({ theme }) => ({
@@ -21,6 +21,15 @@ const About = () => {
         borderRadius: '8px',
     });
 
+    const TypingIndicator = styled(Box)({
+        display: 'inline-block',
+        width: '2px',
+        height: '50px',
+        backgroundColor: 'white',
+        animation: 'blink 1s infinite',
+        marginLeft: '5px',
+    });
+
     const phrases = ["Hello, I'm Igor."];
     const [text, setText] = useState("");
     const [index, setIndex] = useState(0);
@@ -35,15 +44,19 @@ const About = () => {
 
             setText(newText);
 
-            if (!isDeleting && newText === currentPhrase) {
-                setTimeout(() => setIsDeleting(true), 1000);
+            if (!isDeleting) {
+                if (newText === currentPhrase) {
+                    setTimeout(() => {
+                        setIsDeleting(true);
+                    }, 1000);
+                }
             } else if (isDeleting && newText === "") {
                 setIsDeleting(false);
                 setIndex((prevIndex) => (prevIndex + 1) % phrases.length);
             }
         };
 
-        const timer = setTimeout(handleTyping, isDeleting ? 100 : 150);
+        const timer = setTimeout(handleTyping, isDeleting ? 50 : 150);
         return () => clearTimeout(timer);
     }, [text, isDeleting, index]);
 
@@ -54,7 +67,10 @@ const About = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <AnimatedTextContainer>
-                            <Typography color="primary" variant="h3" textAlign="start" pb={2}>{text}</Typography>
+                            <Typography color="primary" variant="h3" textAlign="start" pb={2}>
+                                {text}
+                                <TypingIndicator /> 
+                            </Typography>
                         </AnimatedTextContainer>
                         <Typography color="primary" variant="h5" textAlign="start" mt={4}>
                             I am a computer science student, I am 26 years old and I live in Porto Alegre/RS.

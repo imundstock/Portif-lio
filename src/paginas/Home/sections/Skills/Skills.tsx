@@ -24,9 +24,18 @@ const tecnologias = [
   { name: 'Git', icon: <img src={GitIcon} alt="Git Icon" width="50" height="50" />, description: 'Version control system for tracking changes in code during development.', url: 'https://github.com/' },
 ];
 
+const TypingIndicator = styled(Box)({
+  display: 'inline-block',
+  width: '2px',
+  height: '40px',
+  backgroundColor: 'white',
+  animation: 'blink 1s infinite',
+  marginLeft: '5px',
+});
+
 const Tecnologias = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 5; // Alterado para 5
+  const itemsPerPage = 5;
   const [animatedTitle, setAnimatedTitle] = useState("Tecnologias");
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -54,8 +63,8 @@ const Tecnologias = () => {
   });
 
   useEffect(() => {
+    const currentPhrase = "Tecnologias";
     const handleTyping = () => {
-      const currentPhrase = "Tecnologias";
       const newText = isDeleting
         ? currentPhrase.substring(0, animatedTitle.length - 1)
         : currentPhrase.substring(0, animatedTitle.length + 1);
@@ -78,11 +87,7 @@ const Tecnologias = () => {
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? tecnologias.length - 1 : (prevIndex - 1 + tecnologias.length) % tecnologias.length));
-  };
-
-  const handleClick = (url: string | URL | undefined) => {
-    window.open(url, '_blank');
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? tecnologias.length - 1 : prevIndex - 1));
   };
 
   const displayedItems = [];
@@ -96,6 +101,7 @@ const Tecnologias = () => {
         <TitleContainer>
           <Typography variant="h3" align="left" color="primary">
             {animatedTitle}
+            <TypingIndicator /> 
           </Typography>
         </TitleContainer>
         <StyledSkillsContainer>
@@ -113,7 +119,7 @@ const Tecnologias = () => {
               mx={1}
               minWidth="150px"
               sx={{ cursor: 'pointer' }} 
-              onClick={() => handleClick(skill.url)} 
+              onClick={() => window.open(skill.url, '_blank')} 
             >
               <Tooltip
                 title={<Typography sx={{ fontSize: '1.1rem', p: 1 }}>{skill.description}</Typography>}
