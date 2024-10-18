@@ -23,7 +23,7 @@ const Hero = () => {
     }))
 
     const StyledImg = styled("img")(() =>({
-        width: "80%",
+        width: "100%",
         borderRadius: "50%",
         border: "2px solid white"
     })) 

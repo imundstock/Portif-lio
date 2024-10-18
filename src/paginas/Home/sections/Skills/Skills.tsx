@@ -71,7 +71,7 @@ const Tecnologias = () => {
               mx={1}
               minWidth="150px"
               sx={{ cursor: 'pointer' }} 
-              onClick={() => handleClick(skill.url)} // Adicionando a função de clique
+              onClick={() => handleClick(skill.url)} 
             >
               <Tooltip
                 title={<Typography sx={{ fontSize: '1.1rem', p: 1 }}>{skill.description}</Typography>}
