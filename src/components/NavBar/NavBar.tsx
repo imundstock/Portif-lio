@@ -9,13 +9,21 @@ const NavBar = () => {
         color: "#fff"
     }))
 
+    const scrollToSection = (sectionId: string) => {
+        const section = document.getElementById(sectionId)
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' })
+        }
+    }
+
     return (
         <>
-            <AppBar position="absolute">
+            <AppBar position="fixed">
                 <StyledToobar>
-                    <MenuItem>About</MenuItem>
-                    <MenuItem>Skills</MenuItem>
-                    <MenuItem>Projects</MenuItem>
+                    <MenuItem onClick={() => scrollToSection('home')}>Home</MenuItem>
+                    <MenuItem onClick={() => scrollToSection('about')}>About</MenuItem>
+                    <MenuItem onClick={() => scrollToSection('projects')}>Projects</MenuItem>
+                    <MenuItem onClick={() => scrollToSection('tecnologias')}>Tecnologias</MenuItem>
                 </StyledToobar>
             </AppBar>
         </>
