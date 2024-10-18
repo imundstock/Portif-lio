@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { styled, Container, Box, Typography, Tooltip, IconButton } from "@mui/material";
 import HtmlIcon from "@/icons/html.svg";
 import CssIcon from "@/icons/css.svg";
@@ -24,20 +24,9 @@ const tecnologias = [
   { name: 'Git', icon: <img src={GitIcon} alt="Git Icon" width="50" height="50" />, description: 'Version control system for tracking changes in code during development.', url: 'https://github.com/' },
 ];
 
-const TypingIndicator = styled(Box)({
-  display: 'inline-block',
-  width: '2px',
-  height: '40px',
-  backgroundColor: 'white',
-  animation: 'blink 1s infinite',
-  marginLeft: '5px',
-});
-
 const Tecnologias = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 5;
-  const [animatedTitle, setAnimatedTitle] = useState("Tecnologias");
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const StyledHero = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
@@ -45,6 +34,7 @@ const Tecnologias = () => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    position: 'relative',
   }));
 
   const StyledSkillsContainer = styled(Box)(({ theme }) => ({
@@ -53,6 +43,7 @@ const Tecnologias = () => {
     overflow: 'hidden',
     padding: theme.spacing(2),
     position: 'relative',
+    zIndex: 1, // Adicionando z-index para garantir que os botões fiquem acima
   }));
 
   const TitleContainer = styled(Box)({
@@ -60,27 +51,9 @@ const Tecnologias = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    position: 'relative',
+    zIndex: 2, // Certificando-se de que o título esteja acima do fundo
   });
-
-  useEffect(() => {
-    const currentPhrase = "Tecnologias";
-    const handleTyping = () => {
-      const newText = isDeleting
-        ? currentPhrase.substring(0, animatedTitle.length - 1)
-        : currentPhrase.substring(0, animatedTitle.length + 1);
-
-      setAnimatedTitle(newText);
-
-      if (!isDeleting && newText === currentPhrase) {
-        setTimeout(() => setIsDeleting(true), 1000);
-      } else if (isDeleting && newText === "") {
-        setIsDeleting(false);
-      }
-    };
-
-    const timer = setTimeout(handleTyping, isDeleting ? 100 : 150);
-    return () => clearTimeout(timer);
-  }, [animatedTitle, isDeleting]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % tecnologias.length);
@@ -100,8 +73,7 @@ const Tecnologias = () => {
       <Container maxWidth="lg">
         <TitleContainer>
           <Typography variant="h3" align="left" color="primary">
-            {animatedTitle}
-            <TypingIndicator /> 
+            Tecnologias
           </Typography>
         </TitleContainer>
         <StyledSkillsContainer>
@@ -118,8 +90,8 @@ const Tecnologias = () => {
               boxShadow={3}
               mx={1}
               minWidth="150px"
-              sx={{ cursor: 'pointer' }} 
-              onClick={() => window.open(skill.url, '_blank')} 
+              sx={{ cursor: 'pointer' }}
+              onClick={() => window.open(skill.url, '_blank')}
             >
               <Tooltip
                 title={<Typography sx={{ fontSize: '1.1rem', p: 1 }}>{skill.description}</Typography>}

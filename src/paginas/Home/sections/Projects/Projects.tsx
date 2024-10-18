@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { styled, Container, Grid, Box, Typography, Link, IconButton } from "@mui/material";
 import PrintCalculadorL from "../../../../assets/images/PrintCalculadorL.jpg";
 import PrintCalculadorD from "../../../../assets/images/PrintCalculadorD.jpg";
@@ -10,7 +10,7 @@ import ArrowForward from '@mui/icons-material/ArrowForward';
 const projectsData = [
   {
     title: "Calculadora",
-    description: "Criada com JS, HTML and CSS.",
+    description: "Criada com JS, HTML e CSS.",
     images: [PrintCalculadorL, PrintCalculadorD],
     link: "https://github.com/imundstock/ConversorMonetario",
   },
@@ -22,19 +22,8 @@ const projectsData = [
   },
 ];
 
-const TypingIndicator = styled(Box)({
-  display: 'inline-block',
-  width: '2px',
-  height: '40px',
-  backgroundColor: 'white',
-  animation: 'blink 1s infinite',
-  marginLeft: '5px',
-});
-
 const Projects = () => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [animatedTitle, setAnimatedTitle] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const StyledHero = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
@@ -53,43 +42,13 @@ const Projects = () => {
     minHeight: '80px',
   });
 
-  useEffect(() => {
-    const currentPhrase = projectsData[currentProjectIndex].title;
-
-    const handleTyping = () => {
-      const newText = isDeleting
-        ? currentPhrase.substring(0, animatedTitle.length - 1)
-        : currentPhrase.substring(0, animatedTitle.length + 1);
-
-      setAnimatedTitle(newText);
-
-      if (!isDeleting && newText === currentPhrase) {
-        setTimeout(() => setIsDeleting(true), 1000);
-      } else if (isDeleting && newText === "") {
-        setIsDeleting(false);
-      }
-    };
-
-    const timer = setTimeout(handleTyping, isDeleting ? 100 : 150);
-    return () => clearTimeout(timer);
-  }, [animatedTitle, isDeleting, currentProjectIndex]);
-
   const handleNext = () => {
-    setIsDeleting(false);
-    setAnimatedTitle("");
     setCurrentProjectIndex((prevIndex) => (prevIndex + 1) % projectsData.length);
   };
 
   const handlePrevious = () => {
-    setIsDeleting(false);
-    setAnimatedTitle("");
     setCurrentProjectIndex((prevIndex) => (prevIndex - 1 + projectsData.length) % projectsData.length);
   };
-
-  useEffect(() => {
-    setAnimatedTitle("");
-    setIsDeleting(false);
-  }, [currentProjectIndex]);
 
   return (
     <StyledHero>
@@ -98,8 +57,7 @@ const Projects = () => {
           <Grid item xs={12} md={5}>
             <TitleContainer>
               <Typography color="primary" variant="h3" textAlign="start" pb={2} mb={3}>
-                {animatedTitle}
-                <TypingIndicator /> {/* Sempre visível */}
+                {projectsData[currentProjectIndex].title}
               </Typography>
             </TitleContainer>
             <Typography color="primary" variant="h5" textAlign="start" mb={5}>
