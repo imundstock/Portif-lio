@@ -1,6 +1,5 @@
-import { styled, Container, Box, Typography, Tooltip } from "@mui/material";
-
-// Importando os ícones
+import { useState, useEffect } from 'react';
+import { styled, Container, Box, Typography, Tooltip, IconButton } from "@mui/material";
 import HtmlIcon from "@/icons/html.svg";
 import CssIcon from "@/icons/css.svg";
 import JavascriptIcon from "@/icons/js.svg";
@@ -10,8 +9,9 @@ import NodeIcon from "@/icons/nodejs.svg";
 import DatabaseIcon from "@/icons/mongodb.svg";
 import JavaIcon from "@/icons/java.svg";
 import GitIcon from "@/icons/github.svg";
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 
-// Adicionando URLs correspondentes
 const tecnologias = [
   { name: 'HTML', icon: <img src={HtmlIcon} alt="HTML Icon" width="50" height="50" />, description: 'Markup language for creating web pages.', url: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
   { name: 'CSS', icon: <img src={CssIcon} alt="CSS Icon" width="50" height="50" />, description: 'Style sheet language for describing the presentation of a document.', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
@@ -25,39 +25,81 @@ const tecnologias = [
 ];
 
 const Tecnologias = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 5; // Alterado para 5
+  const [animatedTitle, setAnimatedTitle] = useState("Tecnologias");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const StyledHero = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
     height: "100vh",
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
   }));
 
   const StyledSkillsContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
-    overflowX: 'auto',
+    justifyContent: 'center',
+    overflow: 'hidden',
     padding: theme.spacing(2),
-    whiteSpace: 'nowrap',
-    '&::-webkit-scrollbar': {
-      height: '8px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.palette.primary.main,
-      borderRadius: '4px',
-    },
+    position: 'relative',
   }));
+
+  const TitleContainer = styled(Box)({
+    height: '80px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  });
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const currentPhrase = "Tecnologias";
+      const newText = isDeleting
+        ? currentPhrase.substring(0, animatedTitle.length - 1)
+        : currentPhrase.substring(0, animatedTitle.length + 1);
+
+      setAnimatedTitle(newText);
+
+      if (!isDeleting && newText === currentPhrase) {
+        setTimeout(() => setIsDeleting(true), 1000);
+      } else if (isDeleting && newText === "") {
+        setIsDeleting(false);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, isDeleting ? 100 : 150);
+    return () => clearTimeout(timer);
+  }, [animatedTitle, isDeleting]);
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % tecnologias.length);
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? tecnologias.length - 1 : (prevIndex - 1 + tecnologias.length) % tecnologias.length));
+  };
 
   const handleClick = (url: string | URL | undefined) => {
     window.open(url, '_blank');
   };
 
+  const displayedItems = [];
+  for (let i = 0; i < itemsPerPage; i++) {
+    displayedItems.push(tecnologias[(currentIndex + i) % tecnologias.length]);
+  }
+
   return (
     <StyledHero>
       <Container maxWidth="lg">
-        <Typography variant="h3" align="left" mb={4} color="primary">
-          Tecnologias
-        </Typography>
+        <TitleContainer>
+          <Typography variant="h3" align="left" color="primary">
+            {animatedTitle}
+          </Typography>
+        </TitleContainer>
         <StyledSkillsContainer>
-          {tecnologias.map((skill) => (
+          {displayedItems.map((skill) => (
             <Box
               key={skill.name}
               display="inline-flex"
@@ -87,6 +129,14 @@ const Tecnologias = () => {
             </Box>
           ))}
         </StyledSkillsContainer>
+        <Box display="flex" justifyContent="space-between" mt={4}>
+          <IconButton onClick={handlePrevious} color="primary">
+            <ArrowBack fontSize="large" />
+          </IconButton>
+          <IconButton onClick={handleNext} color="primary">
+            <ArrowForward fontSize="large" />
+          </IconButton>
+        </Box>
       </Container>
     </StyledHero>
   );
